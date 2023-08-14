@@ -36,9 +36,6 @@ else
     AutoFarm=MainData.AutoFarm
 end
 print(MainData.AutoFarm)
-if not AutoFarm then 
-print('auto farm is not enabled')    
-return end
 if not game:IsLoaded() then game.Loaded:Wait() end
 local Planets = {
     [5534753074] = {"LanderAscentStage", "Lunar", " Sample", "Lander", "GatewayRemote"},
@@ -67,6 +64,9 @@ if Cashout then
 Cashout:FireServer()
 SendNotif('Cashout Success','Cashed out ignore the green button',3)  
 end
+if not AutoFarm then 
+print('auto farm is not enabled')    
+return end
 wait(3)
 local t={
 6669650377,
