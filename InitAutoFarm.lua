@@ -57,16 +57,16 @@ function GetNames()
         return rval
     end
 end
-
+if not AutoFarm then 
+print('auto farm is not enabled')    
+return end
 if not GetNames() then 
 local Cashout=game:GetService("ReplicatedStorage"):FindFirstChild("Cashout")
 if Cashout then 
 Cashout:FireServer()
 SendNotif('Cashout Success','Cashed out ignore the green button',3)  
 end
-if not AutoFarm then 
-print('auto farm is not enabled')    
-return end
+
 wait(3)
 local t={
 6669650377,
