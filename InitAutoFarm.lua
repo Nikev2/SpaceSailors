@@ -35,10 +35,7 @@ else
     MainData=data
     AutoFarm=MainData.AutoFarm
 end
-function SaveData()
-    local data=http:JSONEncode(MainData)
-    writefile(FileName,data)
-end
+print(MainData.AutoFarm)
 if not AutoFarm then 
 print('auto farm is not enabled')    
 return end
@@ -136,6 +133,7 @@ function CollectSamples()
     local Capacity = AmountStored.Parent.Capacity
     
     repeat
+    
     PickUp:FireServer()
     while task.wait() do
         if Collected then break end
@@ -162,7 +160,6 @@ Collected=true
 end
 table.insert(getgenv().Connections,plr.Backpack.ChildAdded:Connect(RockAdded))
 CollectSamples()
-
 
 
 
