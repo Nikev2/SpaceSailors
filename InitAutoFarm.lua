@@ -142,7 +142,20 @@ function CollectSamples()
     until AmountStored.Value==Capacity.Value           
    
     game:GetService("ReplicatedStorage")[GetNames()[5]]:FireServer(plr.Name)
-end 
+end
+local plr=game.Players.LocalPlayer
+local Warp
+for i,v in pairs(game.ReplicatedStorage:GetDescendants()) do
+    if v.Name=="WarpLandRemote" then
+        Warp=v.Parent:FindFirstChild(v.Name)
+        break
+    else 
+    Warp=false
+    end
+end
+if Warp then
+Warp:FireServer(plr.Name)
+end
 SendNotif('Waiting to land','autofarm will begin when you land',5)
 local landed=GetLander().Landed
 while task.wait() do
