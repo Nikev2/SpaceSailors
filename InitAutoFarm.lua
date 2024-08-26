@@ -2,6 +2,9 @@ function SendNotif(title, text, delay)
     game.StarterGui:SetCore("SendNotification", {Title = title,Text = text,Duration = delay})
 end
 
+function getgenv()
+    return _G
+end
 if getgenv().Connections==nil then
 getgenv().Connections={}
 else
