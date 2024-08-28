@@ -41,7 +41,7 @@ end
 print(MainData.AutoFarm)
 if not game:IsLoaded() then game.Loaded:Wait() end
 local Planets = {
-    [5534753074] = {"LanderAscentStage", "Lunar", " Sample", "Lander", "GatewayRemote"},
+    [5534753074] = {"LanderAscentStage", "Lunar", " Sample", "Lander2", "GatewayRemote"},
     [6669650377] = {"UpperStage", "Cererian", " Sample", "CeresLander", "DSTRemote"},
     [6119982580] = {"MidUpperStage", "Iron", " Oxide", "MarsLander", "DSTRemote"},
 }
@@ -162,9 +162,7 @@ Warp:FireServer(plr.Name)
 end
 SendNotif('Waiting to land','autofarm will begin when you land',5)
 
-for i,v in pairs(GetLander():GetChildren()) do 
-    print(v)
-end
+
 
 local landed=GetLander().Landed
 
