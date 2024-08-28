@@ -162,7 +162,9 @@ Warp:FireServer(plr.Name)
 end
 SendNotif('Waiting to land','autofarm will begin when you land',5)
 local landed=GetLander().Landed
-landed:GetPropertyChangedSignal("Value"):Wait()
+while task.wait() do
+    if landed.Value then break end
+end
 SendNotif('Autofarming','started to begin autofarming',5)
 wait(3)
 function RockAdded()
