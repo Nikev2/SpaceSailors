@@ -161,13 +161,14 @@ if Warp then
 Warp:FireServer(plr.Name)
 end
 SendNotif('Waiting to land','autofarm will begin when you land',5)
-local landed=GetLander().Landed
-print(GetLander())
-print(landed)
+
 for i,v in pairs(GetLander():GetChildren()) do 
     print(v)
 end
-print(landed.ClassName)
+
+local landed=GetLander().Landed
+
+
 while task.wait() do
     if landed.Value then break end
 end
