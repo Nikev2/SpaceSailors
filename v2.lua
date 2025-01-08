@@ -1,3 +1,4 @@
+if not game:IsLoaded() then game.Loaded:Wait() end
 function SendNotif(title, text, delay)
     game.StarterGui:SetCore("SendNotification", {Title = title,Text = text,Duration = delay})
 end
@@ -28,6 +29,7 @@ else
     end 
     getgenv().Connections={}
 end
+
 local TeleportService = game:GetService("TeleportService")
 local Collected=false
 local FileName="SS.JSON"
