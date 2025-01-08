@@ -133,10 +133,9 @@ if Cashout then
 Cashout:FireServer()
 SendNotif('Cashout Success','Cashed out ignore the green button',3)  
 end
---[[if not AutoFarm then 
+if not AutoFarm then 
 print('auto farm is not enabled')    
 return end
---]]
 
 
 function GetSpecialLanderByRemote(RemoteName)
