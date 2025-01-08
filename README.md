@@ -16,6 +16,7 @@ V1 script: The first verison uses the basic landers and can go to random planets
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Nikev2/SpaceSailors/main/Loader"))()
 ```
 V2 script: Adds the new landers in the game still in beta due to trying to figure out how to randomize the planets should still work anyway this allows for bigger money just make sure it doesn't teleport you to ceres for fucks sake theres no special lander on the planet
+For now you can just rejoin the game to try to increase the planet randomization since it ussaly starts at the lunar gateway i guess or you might as well be stuck farming on the moon
 ```lua
 ------ Put this in your AutoExecuteFolder 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Nikev2/SpaceSailors/refs/heads/main/v2loader.lua"))()
