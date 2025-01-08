@@ -159,10 +159,10 @@ if not Get_Names() then
     
     }
 
-    --if not IsInGateway() then --- Teleports to lunar gateway decided to scrap the old teleport service entierly execpt for this one
-        --TeleportService:Teleport(5515926734)
-    --end
-
+    
+    if game.PlaceId==5000143962 then
+        TeleportService:Teleport(5515926734)
+    end
   
         ---Gives you the finest shit if you own it
         print("lander exists")
