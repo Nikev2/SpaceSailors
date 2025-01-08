@@ -18,5 +18,5 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Nikev2/SpaceSailors/m
 V2 script: Adds the new landers in the game still in beta due to trying to figure out how to randomize the planets should still work anyway this allows for bigger money just make sure it doesn't teleport you to ceres for fucks sake theres no special lander on the planet
 ```lua
 ------ Put this in your AutoExecuteFolder 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Nikev2/SpaceSailors/refs/heads/main/v2.lua"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Nikev2/SpaceSailors/refs/heads/main/v2loader.lua"))()
 ```
