@@ -1,3 +1,4 @@
+if not game:IsLoaded() then game.Loaded:Wait() end
 if game.GameId~=1722988797 then
     error("this isnt space sailors code wont run")
     return
