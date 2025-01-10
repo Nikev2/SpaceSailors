@@ -1,4 +1,4 @@
-if game.GameId~=1722988797 then
+if game.GameId~=5000143962 then
     error("this isnt space sailors code wont run")
     return
 end
