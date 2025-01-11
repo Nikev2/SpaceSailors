@@ -9,11 +9,11 @@ called AutoExecute). Join the game and toggle AutoFarm when the GUI appears then
 
 -It gives you 800-1000 if you have no multiplier.
 
-V1 script: The first verison uses the basic landers and can go to random planets
+V1 script: The first verison uses the basic landers and can go to random planets (OLD Not supported anymore but somehwat more stable) 
 
 ```lua
 ------ Put this in your AutoExecuteFolder
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Nikev2/SpaceSailors/main/Loader"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Nikev2/SpaceSailors/refs/heads/main/v1%20OLD.lua"))()
 ```
 V2 script: Adds the new landers in the game (MAIN SCRIPT) 
 ```lua
