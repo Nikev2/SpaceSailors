@@ -68,10 +68,7 @@ end
 
 
 if not game:IsLoaded() then game.Loaded:Wait() end
-if AutoFarm==false then
-    print("wont autofarm")
-    return false
-end
+
 if game.PlaceId == 5000143962 then 
     MainData.CameFromPlanet = false
     SaveData()
@@ -134,7 +131,10 @@ if Cashout then
     Cashout:FireServer()
     SendNotif('Cashout Success', 'Cashed out ignore the green button', 3) 
 end
-
+if AutoFarm==false then
+    print("wont autofarm")
+    return false
+end
 local function GetSpecialLanderByRemote(RemoteName)
     for _, Name in pairs(SpecialLanders) do
         if Name[2] == RemoteName then
@@ -218,9 +218,17 @@ end
 local function GetPrompt() 
     return GetLander()[GetNames()[1]].Deposit.ProximityPrompt 
 end
+local function GetPrompt2()
+    local val=false
+    if GetLander().Name == "Aresonius" then
+        val=GetLander()[GetNames()[1]].Deposit2.ProximityPrompt 
+    end
+    return val
+end
 
 function CollectSamples()
     local Prompt = GetPrompt()
+    
     local Tool = GetTool()
     local PickUp = Tool.PickUp
     local AmountStored = Prompt.Parent.Parent.Parent.ResourceValues.Storage
@@ -257,12 +265,17 @@ end
 
 SendNotif('Waiting to land', 'autofarm will begin when you land', 5)
 
-local function QuickTpToPrompt(prompt)
-    if GetLander().Name == "Aresonius" then
-        hum.Sit = false
+local function QuickTpToPrompt(Prompt)
+    local AmountStored = Prompt.Parent.Parent.Parent.ResourceValues.Storage
+    local Capacity = AmountStored.Parent.Capacity
+     spawn(function() 
+        if GetLander().Name == "Aresonius" then --stop it from being more glitchy
+        repeat
         task.wait()
-        Char.HumanoidRootPart.CFrame = prompt.Parent.CFrame
-    end
+        Char.HumanoidRootPart.CFrame = Prompt.Parent.CFrame
+        until AmountStored.Value >= Capacity.Value  
+        end
+     end)
 end
 
 local landed = GetLander().Landed
@@ -272,14 +285,33 @@ end
 
 SendNotif('Autofarming', 'started to autofarm', 5)
 wait(1)
-
+--fireproximityprompt
 
 QuickTpToPrompt(GetPrompt())
+
+
+
 local function RockAdded()
+
+    local Prompt=GetPrompt()
+    local Prompt2 = GetPrompt2()
+    local Deposit1Stored=1
+    local Deposit2Stored=0
     local Rock = plr.Backpack:FindFirstChild(GetNames()[2] .. GetNames()[3])
     if not Rock then return end
     hum:EquipTool(Rock)
-    fireproximityprompt(GetPrompt())
+     fireproximityprompt(Prompt) -- to not equalize them
+    if Prompt2~=false then ---Attempts to use the 2nd deposit box
+        if Deposit2Stored>=Deposit1Stored then
+            fireproximityprompt(Prompt2)
+            Deposit2Stored=Deposit2Stored+1
+        elseif Deposit1Stored>=Deposit2Stored then
+            fireproximityprompt(Prompt)
+            Deposit1Stored=Deposit1Stored+1
+        end
+    else
+        fireproximityprompt(Prompt)
+    end
     Collected = true 
 end
 
