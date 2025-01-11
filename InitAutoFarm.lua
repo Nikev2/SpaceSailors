@@ -45,7 +45,7 @@ local http = game:GetService("HttpService")
 
 if game.GameId ~= 1722988797 then
     print("this isnt space sailors")
-    return false
+    return
 end
 
 if not isfile(FileName) then
@@ -64,7 +64,12 @@ function SaveData()
     writefile(FileName, data)
     MainData = http:JSONDecode(readfile(FileName))
 end
+
+
+
+if not game:IsLoaded() then game.Loaded:Wait() end
 if AutoFarm==false then
+    print("wont autofarm")
     return false
 end
 if game.PlaceId == 5000143962 then 
@@ -73,9 +78,6 @@ if game.PlaceId == 5000143962 then
     TpToGateway()
     return
 end
-
-if not game:IsLoaded() then game.Loaded:Wait() end
-
 local Planets = {
     [5534753074] = {
         {"LanderAscentStage", "Lunar", " Sample", "Lander2", "GatewayRemote"},
@@ -271,12 +273,13 @@ end
 SendNotif('Autofarming', 'started to autofarm', 5)
 wait(1)
 
+
+QuickTpToPrompt(GetPrompt())
 local function RockAdded()
     local Rock = plr.Backpack:FindFirstChild(GetNames()[2] .. GetNames()[3])
     if not Rock then return end
     hum:EquipTool(Rock)
     fireproximityprompt(GetPrompt())
-    QuickTpToPrompt(GetPrompt())
     Collected = true 
 end
 
