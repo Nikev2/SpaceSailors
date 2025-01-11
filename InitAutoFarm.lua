@@ -64,8 +64,8 @@ function SaveData()
     writefile(FileName, data)
     MainData = http:JSONDecode(readfile(FileName))
 end
-if not AutoFarm then
-    return end
+if AutoFarm==false then
+    return
 end
 if game.PlaceId == 5000143962 then 
     MainData.CameFromPlanet = false
