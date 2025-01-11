@@ -1,8 +1,9 @@
 if not game:IsLoaded() then game.Loaded:Wait() end
-if game.GameId~=1722988797 then
+if game.GameId~=1722988797  then
     error("this isnt space sailors code wont run")
     return
 end
+
 local http=game:GetService("HttpService")
 if not game:IsLoaded() then game.Loaded:Wait() end
 local Init=function()
@@ -25,6 +26,7 @@ function SaveData()
     writefile(FileName,data)
     MainData=http:JSONDecode(readfile(FileName))
     Init()
+    print("saved")
 end
 
 
@@ -44,15 +46,18 @@ local QuitDivider = Main:Divider{
 local autofarm=Divider:Toggle{
     Name="Auto Farm",
     Description="Don't spam it if disabled rejoin or wait for the current auto farm to complete",
-    State=AutoFarm,
+    State=MainData.AutoFarm,
     Callback=function(state)
-        if state then
-            MainData.AutoFarm=false
-            SaveData()
-        else
-            MainData.AutoFarm=true
-            SaveData()
-        end
+        
+
+        MainData.AutoFarm=state
+        local data=http:JSONEncode(MainData)
+        delfile(FileName)
+        writefile(FileName,data)
+        MainData=http:JSONDecode(readfile(FileName))
+        Init()
+        print("saved")
+        Init()
         
     end
 }
@@ -66,3 +71,5 @@ local Quit = QuitDivider:Button{
    end
 }
 Init()
+
+
