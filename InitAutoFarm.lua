@@ -71,7 +71,9 @@ if game.PlaceId == 5000143962 then
     TpToGateway()
     return
 end
-
+if not AutoFarm then
+    return end
+end
 if not game:IsLoaded() then game.Loaded:Wait() end
 
 local Planets = {
