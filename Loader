@@ -24,7 +24,7 @@ function SaveData()
     delfile(FileName)
     writefile(FileName,data)
     MainData=http:JSONDecode(readfile(FileName))
-    Init()
+    print("saved")
 end
 
 
@@ -49,9 +49,11 @@ local autofarm=Divider:Toggle{
         if state then
             MainData.AutoFarm=true
             SaveData()
+            Init()
         else
             MainData.AutoFarm=false
             SaveData()
+            Init()
         end
         
     end
