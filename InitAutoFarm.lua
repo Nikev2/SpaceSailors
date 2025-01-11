@@ -45,7 +45,7 @@ local http = game:GetService("HttpService")
 
 if game.GameId ~= 1722988797 then
     print("this isnt space sailors")
-    return
+    return false
 end
 
 if not isfile(FileName) then
@@ -65,7 +65,7 @@ function SaveData()
     MainData = http:JSONDecode(readfile(FileName))
 end
 if AutoFarm==false then
-    return
+    return false
 end
 if game.PlaceId == 5000143962 then 
     MainData.CameFromPlanet = false
