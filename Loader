@@ -46,11 +46,11 @@ local QuitDivider = Main:Divider{
 local autofarm=Divider:Toggle{
     Name="Auto Farm",
     Description="Don't spam it if disabled rejoin or wait for the current auto farm to complete",
-    State=AutoFarm,
+    State=MainData.AutoFarm,
     Callback=function(state)
         print(state)
 
-        MainData.AutoFarm=state
+        MainData.AutoFarm=not state
         local data=http:JSONEncode(MainData)
         delfile(FileName)
         writefile(FileName,data)
