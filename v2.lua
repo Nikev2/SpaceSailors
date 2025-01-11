@@ -161,12 +161,12 @@ else
     MainData.CameFromPlanet = false
     SaveData()
 end
-
+wait(3)
 if not Get_Names() then
     if IsInOrbiter() == false and IsInGateway() then
         local t = {}
         for _, Table in pairs(SpecialLanders) do
-            table.insert(t, Table[2])
+           table.insert(t, Table[2])
         end
         local RemoteName = t[math.random(1, #t)]
         local CustomLander = GetSpecialLanderByRemote(tostring(RemoteName))[1]
