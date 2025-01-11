@@ -1,181 +1,282 @@
+local TeleportService = game:GetService("TeleportService")
+
 function SendNotif(title, text, delay)
-    game.StarterGui:SetCore("SendNotification", {Title = title,Text = text,Duration = delay})
+    game.StarterGui:SetCore("SendNotification", {Title = title, Text = text, Duration = delay})
 end
 
-function getgenv()
-    return _G
+function IsInGateway()
+    return game.PlaceId == 5515926734
 end
-if getgenv().Connections==nil then
-getgenv().Connections={}
-else
-    for _,Connection in pairs(getgenv().Connections) do 
-        Connection:Disconnect()
-    end 
-    getgenv().Connections={}
+
+function TpToGateway()
+    TeleportService:Teleport(5515926734)
 end
-local TeleportService = game:GetService("TeleportService")
-local Collected=false
-local FileName="SS.JSON"
-local DefaultData={
-    AutoFarm=false
+
+local function GetChildrenOfClass(parent, ClassName)
+    local childrenOfClass = {}
+    for _, child in ipairs(parent:GetChildren()) do
+        if child:IsA(ClassName) then
+            table.insert(childrenOfClass, child)
+        end
+    end
+    return childrenOfClass
+end
+
+_G.Connections = _G.Connections or {}
+for _, Connection in pairs(_G.Connections) do 
+    Connection:Disconnect()
+end 
+_G.Connections = {}
+
+local Collected = false
+local FileName = "SS.JSON"
+local plr = game.Players.LocalPlayer
+local Char = plr.Character
+local hum = Char:WaitForChild("Humanoid")
+
+local DefaultData = {
+    AutoFarm = false,
+    CameFromPlanet = false
 }
 local MainData
 local AutoFarm
-local http=game:GetService("HttpService")
-if game.GameId~=1722988797 then
+local CameFromPlanet
+local http = game:GetService("HttpService")
+
+if game.GameId ~= 1722988797 then
     print("this isnt space sailors")
     return
 end
+
 if not isfile(FileName) then
-    local data=http:JSONEncode(DefaultData)
-    writefile(FileName,data)
-    local a=readfile(FileName)
-    data=http:JSONDecode(a)
-    MainData=data
+    local data = http:JSONEncode(DefaultData)
+    writefile(FileName, data)
+    MainData = http:JSONDecode(readfile(FileName))
 else
-    local a=readfile(FileName)
-    local data=http:JSONDecode(a)
-    MainData=data
-    AutoFarm=MainData.AutoFarm
+    MainData = http:JSONDecode(readfile(FileName))
+    AutoFarm = MainData.AutoFarm
+    CameFromPlanet = MainData.CameFromPlanet
 end
-print(MainData.AutoFarm)
+
+function SaveData()
+    local data = http:JSONEncode(MainData)
+    delfile(FileName)
+    writefile(FileName, data)
+    MainData = http:JSONDecode(readfile(FileName))
+end
+
+if game.PlaceId == 5000143962 then 
+    MainData.CameFromPlanet = false
+    SaveData()
+    TpToGateway()
+    return
+end
+
 if not game:IsLoaded() then game.Loaded:Wait() end
+
 local Planets = {
-    [5534753074] = {"LanderAscentStage", "Lunar", " Sample", "Lander2", "GatewayRemote"},
-    [6669650377] = {"UpperStage", "Cererian", " Sample", "CeresLander", "DSTRemote"},
-    [6119982580] = {"MidUpperStage", "Iron", " Oxide", "MarsLander", "DSTRemote"},
+    [5534753074] = {
+        {"LanderAscentStage", "Lunar", " Sample", "Lander2", "GatewayRemote"},
+        {"LLAMA", "Lunar", " Sample", "LLAMA", "GatewayRemote"}
+    }, 
+    [6669650377] = {
+        {"UpperStage", "Cererian", " Sample", "CeresLander", "DSTRemote"}
+    },
+    [6119982580] = {
+        {"MidUpperStage", "Iron", " Oxide", "MarsLander", "DSTRemote"},
+        {"AftCargoHold", "Iron", " Oxide", "Aresonius", "DSTRemote"}
+    }
+} 
+
+local function GetCeresRemote()
+    local b = "ToMarsRemote" 
+    if IsInGateway() then 
+        b = "ToCeresRemote" 
+    elseif game.PlaceId == 6458953928 then 
+        b = "ToMarsRemote" 
+    end
+    return b
+end
+
+local SpecialLanders = {
+    [6458953928] = {"Aresonius", "ToMarsRemote"},
+    [6686215787] = {"none", GetCeresRemote()},
+    [5515926734] = {"LLAMA", "ToMoonRemote"}
 }
 
-function GetNames()
-    local PlaceId = game.PlaceId
-    local rval
-    for i, v in pairs(Planets) do
-        if PlaceId == i then
-            rval = v
+local function Get_Names()
+    return Planets[game.PlaceId] or false
+end
+
+local function GetSpecialLanderName()
+    for id, name in pairs(SpecialLanders) do
+        if game.PlaceId == id then
+            return name
         end
     end
-    if rval == nil then
-        return false
-    else
-        return rval
+end
+
+local function SpecialLanderOwnership()
+    for _, val in pairs(GetChildrenOfClass(Char, "BoolValue")) do
+        if string.find(val.Name, "Access") then 
+            return val.Value
+        end
+    end
+    return false
+end
+
+local Cashout = game:GetService("ReplicatedStorage"):FindFirstChild("Cashout")
+if Cashout then 
+    Cashout:FireServer()
+    SendNotif('Cashout Success', 'Cashed out ignore the green button', 3) 
+end
+
+local function GetSpecialLanderByRemote(RemoteName)
+    for _, Name in pairs(SpecialLanders) do
+        if Name[2] == RemoteName then
+            return Name
+        end
     end
 end
-local Cashout=game:GetService("ReplicatedStorage"):FindFirstChild("Cashout")
-if Cashout then 
-Cashout:FireServer()
-SendNotif('Cashout Success','Cashed out ignore the green button',3)  
+
+local function IsInOrbiter()
+    local OrbiterIds = {
+        6458953928,
+        6686215787 
+    }
+    for _, id in pairs(OrbiterIds) do
+        if game.PlaceId == id then
+            return true
+        end
+    end
+    return false
 end
-if not AutoFarm then 
-print('auto farm is not enabled')    
-return end
-if not GetNames() then 
+
+if IsInOrbiter() and CameFromPlanet then
+    MainData.CameFromPlanet = false
+    SaveData()
+    TpToGateway()
+    return
+else
+    MainData.CameFromPlanet = false
+    SaveData()
+end
 wait(3)
-local t={
-5534753074,
-6669650377,
-6119982580,
-}
-local id=t[math.random(1,#t)]
-TeleportService:Teleport(id)    
-return 
+if not Get_Names() then
+    if IsInOrbiter() == false and IsInGateway() == true then
+        local t = {}
+        for _, Table in pairs(SpecialLanders) do
+           table.insert(t, Table[2])
+        end
+        local RemoteName = t[math.random(1, #t)]
+        local CustomLander = GetSpecialLanderByRemote(tostring(RemoteName))[1]
+        game.ReplicatedStorage[RemoteName]:FireServer(CustomLander)
+    else
+        game.ReplicatedStorage[GetSpecialLanderName()[2]]:FireServer(GetSpecialLanderName()[1])
+    end
+    return
+end 
+
+local function IsMultipleLanderOption()
+    return typeof(Get_Names()[1]) == "table"
 end
 
+local function GetLander()
+    if _G.lander and _G.PlanetInstanceNames then 
+        return _G.lander 
+    end
 
-local UIS = game:GetService("UserInputService")
-local plr = game.Players.LocalPlayer
-local Char = plr.Character
-local hum = Char:FindFirstChild("Humanoid")
-while task.wait() do
-    if hum then break end
-end
-function GetLander()
-    local PlanetName=GetNames()[4]
-    local l
-    for i,v in pairs(workspace:GetChildren()) do
-        if v.Name==PlanetName then
-            if v.LanderOwner.Value==plr.Name then
-                l=v
+    for _, l in pairs(GetChildrenOfClass(workspace, "Model")) do
+        if IsMultipleLanderOption() then 
+            for _, LanderOption in pairs(Get_Names()) do
+                if l.Name == LanderOption[4] and l:FindFirstChild("LanderOwner").Value == plr.Name then
+                    _G.lander = l 
+                    _G.PlanetInstanceNames = LanderOption
+                    return _G.lander
+                end
             end
         end
     end
-    return l
 end
 
-function GetTool()
-for i,v in pairs(plr.Backpack:GetChildren()) do
-   
-       if v.Name:sub(1,7) == "Pick Up" then
-           return v
-          
-         
-    end   
-end
+local function GetTool()
+    for _, v in pairs(plr.Backpack:GetChildren()) do
+        if v.Name:sub(1, 7) == "Pick Up" then
+            return v
+        end 
+    end
 end
 
-function GetPrompt()
-  
-    
-for i,v in pairs(Workspace:GetChildren()) do
-if v:FindFirstChild("LanderOwner") then
-    if v:FindFirstChild("LanderOwner").Value == plr.Name  then
-           
-        return v[GetNames()[1]].Deposit.ProximityPrompt 
-       
-    end    
-end    
+local function GetNames() 
+    return _G.PlanetInstanceNames
 end
 
+local function GetPrompt() 
+    return GetLander()[GetNames()[1]].Deposit.ProximityPrompt 
 end
 
 function CollectSamples()
-    local Prompt=GetPrompt()
+    local Prompt = GetPrompt()
     local Tool = GetTool()
     local PickUp = Tool.PickUp
-    local Amount = Tool.Amount
     local AmountStored = Prompt.Parent.Parent.Parent.ResourceValues.Storage
     local Capacity = AmountStored.Parent.Capacity
     
     repeat
+        if GetLander().Name == "Aresonius" then
+            hum.Sit = false
+        end
+        PickUp:FireServer()
+        while task.wait() do
+            if Collected then break end
+        end
+        task.wait()
+        Collected = false
+    until AmountStored.Value >= Capacity.Value 
     
-    PickUp:FireServer()
-    while task.wait() do
-        if Collected then break end
-    end
-    task.wait()
-    Collected=false
-    until AmountStored.Value==Capacity.Value           
-   
+    MainData.CameFromPlanet = true
+    SaveData()
     game:GetService("ReplicatedStorage")[GetNames()[5]]:FireServer(plr.Name)
 end
-local plr=game.Players.LocalPlayer
+
 local Warp
-for i,v in pairs(game.ReplicatedStorage:GetDescendants()) do
-    if v.Name=="WarpLandRemote" then
-        Warp=v.Parent:FindFirstChild(v.Name)
+for _, v in pairs(game.ReplicatedStorage:GetDescendants()) do
+    if v.Name == "WarpLandRemote" then
+        Warp = v.Parent:FindFirstChild(v.Name)
         break
-    else 
-    Warp=false
     end
 end
+
 if Warp then
-Warp:FireServer(plr.Name)
+    Warp:FireServer(plr.Name)
 end
-SendNotif('Waiting to land','autofarm will begin when you land',5)
 
+SendNotif('Waiting to land', 'autofarm will begin when you land', 5)
 
-
-local landed=GetLander().Landed
-landed:GetPropertyChangedSignal("Value"):Wait()
-SendNotif('Autofarming','started to begin autofarming',5)
-wait(3)
-function RockAdded()
-local Rock=plr.Backpack:FindFirstChild(GetNames()[2]..GetNames()[3])
-if not Rock then return end
-hum:EquipTool(Rock)
-fireproximityprompt(GetPrompt())
-Collected=true
+local function QuickTpToPrompt(prompt)
+    if GetLander().Name == "Aresonius" then
+        hum.Sit = false
+        task.wait()
+        Char.HumanoidRootPart.CFrame = prompt.Parent.CFrame
+    end
 end
-table.insert(getgenv().Connections,plr.Backpack.ChildAdded:Connect(RockAdded))
+
+local landed = GetLander().Landed
+if not landed.Value then 
+    landed:GetPropertyChangedSignal("Value"):Wait()
+end
+
+SendNotif('Autofarming', 'started to autofarm', 5)
+wait(1)
+
+local function RockAdded()
+    local Rock = plr.Backpack:FindFirstChild(GetNames()[2] .. GetNames()[3])
+    if not Rock then return end
+    hum:EquipTool(Rock)
+    fireproximityprompt(GetPrompt())
+    QuickTpToPrompt(GetPrompt())
+    Collected = true 
+end
+
+table.insert(_G.Connections, plr.Backpack.ChildAdded:Connect(RockAdded))
 CollectSamples()
-
-
