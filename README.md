@@ -13,7 +13,7 @@ V1 script: The first verison uses the basic landers and can go to random planets
 
 ```lua
 ------ Put this in your AutoExecuteFolder
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Nikev2/SpaceSailors/refs/heads/main/v1%20OLD.lua"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Nikev2/SpaceSailors/refs/heads/main/v1%20loader"))()
 ```
 V2 script: Adds the new landers in the game (MAIN SCRIPT) 
 ```lua
