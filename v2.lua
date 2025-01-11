@@ -65,15 +65,19 @@ function SaveData()
     MainData = http:JSONDecode(readfile(FileName))
 end
 
+
+
+if not game:IsLoaded() then game.Loaded:Wait() end
+if AutoFarm==false then
+    print("wont autofarm")
+    return false
+end
 if game.PlaceId == 5000143962 then 
     MainData.CameFromPlanet = false
     SaveData()
     TpToGateway()
     return
 end
-
-if not game:IsLoaded() then game.Loaded:Wait() end
-
 local Planets = {
     [5534753074] = {
         {"LanderAscentStage", "Lunar", " Sample", "Lander2", "GatewayRemote"},
@@ -163,7 +167,7 @@ else
 end
 wait(3)
 if not Get_Names() then
-    if IsInOrbiter() == false and IsInGateway()==true then
+    if IsInOrbiter() == false and IsInGateway() == true then
         local t = {}
         for _, Table in pairs(SpecialLanders) do
            table.insert(t, Table[2])
@@ -269,12 +273,13 @@ end
 SendNotif('Autofarming', 'started to autofarm', 5)
 wait(1)
 
+
+QuickTpToPrompt(GetPrompt())
 local function RockAdded()
     local Rock = plr.Backpack:FindFirstChild(GetNames()[2] .. GetNames()[3])
     if not Rock then return end
     hum:EquipTool(Rock)
     fireproximityprompt(GetPrompt())
-    QuickTpToPrompt(GetPrompt())
     Collected = true 
 end
 
