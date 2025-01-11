@@ -64,16 +64,16 @@ function SaveData()
     writefile(FileName, data)
     MainData = http:JSONDecode(readfile(FileName))
 end
-
+if not AutoFarm then
+    return end
+end
 if game.PlaceId == 5000143962 then 
     MainData.CameFromPlanet = false
     SaveData()
     TpToGateway()
     return
 end
-if not AutoFarm then
-    return end
-end
+
 if not game:IsLoaded() then game.Loaded:Wait() end
 
 local Planets = {
