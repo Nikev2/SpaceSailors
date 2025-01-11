@@ -6,7 +6,7 @@ end
 local http=game:GetService("HttpService")
 if not game:IsLoaded() then game.Loaded:Wait() end
 local Init=function()
-loadstring(game:HttpGet('https://raw.githubusercontent.com/Nikev2/SpaceSailors/main/InitAutoFarm.lua'))()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/Nikev2/SpaceSailors/refs/heads/main/v2.lua'))()
 end
 local FileName="SS.JSON"
 local AutoFarm
