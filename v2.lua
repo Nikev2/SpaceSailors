@@ -69,12 +69,7 @@ end
 
 if not game:IsLoaded() then game.Loaded:Wait() end
 
-if game.PlaceId == 5000143962 then 
-    MainData.CameFromPlanet = false
-    SaveData()
-    TpToGateway()
-    return
-end
+
 local Planets = {
     [5534753074] = {
         {"LanderAscentStage", "Lunar", " Sample", "Lander2", "GatewayRemote"},
@@ -134,6 +129,12 @@ end
 if AutoFarm==false then
     print("wont autofarm")
     return false
+end
+if game.PlaceId == 5000143962 then 
+    MainData.CameFromPlanet = false
+    SaveData()
+    TpToGateway()
+    return
 end
 local function GetSpecialLanderByRemote(RemoteName)
     for _, Name in pairs(SpecialLanders) do
