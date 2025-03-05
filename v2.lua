@@ -77,7 +77,8 @@ local Planets = {
         {"AftCargoHold", "Lunar", " Sample", "Aresonius", "GatewayRemote"},
     }, 
     [6669650377] = {
-        {"UpperStage", "Cererian", " Sample", "CeresLander", "DSTRemote"}
+        {"UpperStage", "Cererian", " Sample", "CeresLander", "DSTRemote"},
+        {"AftCargoHold", "Cererian", " Sample", "Aresonius", "DSTRemote"}
     },
     [6119982580] = {
         {"MidUpperStage", "Iron", " Oxide", "MarsLander", "DSTRemote"},
@@ -97,7 +98,7 @@ end
 
 local SpecialLanders = {
     [6458953928] = {"Aresonius", "ToMarsRemote"},
-    [6686215787] = {"none", GetCeresRemote()},
+    [6686215787] = {"Aresonius", GetCeresRemote()},
     [5515926734] = {"Aresonius", "ToMoonRemote"}
 }
 
@@ -243,9 +244,11 @@ function CollectSamples()
             hum.Sit = false
         end
         PickUp:FireServer()
+        
         while task.wait() do
             if Collected then break end
         end
+        
         task.wait()
         Collected = false
     until AmountStored.Value >= Capacity.Value 
@@ -298,25 +301,14 @@ QuickTpToPrompt(GetPrompt())
 local function RockAdded()
 
     local Prompt=GetPrompt()
-    local Prompt2 = GetPrompt2()
-    local Deposit1Stored=1
-    local Deposit2Stored=0
     local Rock = plr.Backpack:FindFirstChild(GetNames()[2] .. GetNames()[3])
     if not Rock then return end
     hum:EquipTool(Rock)
-    
-     fireproximityprompt(Prompt,20) -- to not equalize them
-    if Prompt2~=false then ---Attempts to use the 2nd deposit box
-        if Deposit2Stored>=Deposit1Stored then
-            fireproximityprompt(Prompt2,20)
-            Deposit2Stored=Deposit2Stored+1
-        elseif Deposit1Stored>=Deposit2Stored then
-            fireproximityprompt(Prompt,20)
-            Deposit1Stored=Deposit1Stored+1
-        end
-    else
-        fireproximityprompt(Prompt,20)
+    if GetLander().Name == "Aresonius" then
+        Prompt = GetPrompt2()
     end
+    fireproximityprompt(Prompt) -- to not equalize them
+    
     Collected = true 
 end
 
