@@ -284,14 +284,13 @@ local function QuickTpToPrompt(Prompt)
         end
      end)
 end
-print(GetLander())
+
 local landed = GetLander().Landed
 if not landed.Value then 
     landed:GetPropertyChangedSignal("Value"):Wait()
 end
 
 SendNotif('Autofarming', 'started to autofarm', 5)
-wait(1)
 --fireproximityprompt
 
 QuickTpToPrompt(GetPrompt())
