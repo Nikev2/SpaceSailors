@@ -97,7 +97,7 @@ end
 local SpecialLanders = {
     [6458953928] = {"Aresonius", "ToMarsRemote"},
     [6686215787] = {"none", GetCeresRemote()},
-    [5515926734] = {"LLAMA", "ToMoonRemote"}
+    [5515926734] = {"Aresonius", "ToMoonRemote"}
 }
 
 local function Get_Names()
@@ -301,17 +301,18 @@ local function RockAdded()
     local Rock = plr.Backpack:FindFirstChild(GetNames()[2] .. GetNames()[3])
     if not Rock then return end
     hum:EquipTool(Rock)
-     fireproximityprompt(Prompt) -- to not equalize them
+    
+     fireproximityprompt(Prompt,20) -- to not equalize them
     if Prompt2~=false then ---Attempts to use the 2nd deposit box
         if Deposit2Stored>=Deposit1Stored then
-            fireproximityprompt(Prompt2)
+            fireproximityprompt(Prompt2,20)
             Deposit2Stored=Deposit2Stored+1
         elseif Deposit1Stored>=Deposit2Stored then
-            fireproximityprompt(Prompt)
+            fireproximityprompt(Prompt,20)
             Deposit1Stored=Deposit1Stored+1
         end
     else
-        fireproximityprompt(Prompt)
+        fireproximityprompt(Prompt,20)
     end
     Collected = true 
 end
