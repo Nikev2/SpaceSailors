@@ -73,7 +73,8 @@ if not game:IsLoaded() then game.Loaded:Wait() end
 local Planets = {
     [5534753074] = {
         {"LanderAscentStage", "Lunar", " Sample", "Lander2", "GatewayRemote"},
-        {"LLAMA", "Lunar", " Sample", "LLAMA", "GatewayRemote"}
+        {"LLAMA", "Lunar", " Sample", "LLAMA", "GatewayRemote"},
+        {"AftCargoHold", "Lunar", " Sample", "Aresonius", "GatewayRemote"},
     }, 
     [6669650377] = {
         {"UpperStage", "Cererian", " Sample", "CeresLander", "DSTRemote"}
@@ -195,8 +196,10 @@ local function GetLander()
         if IsMultipleLanderOption() then 
             for _, LanderOption in pairs(Get_Names()) do
                 if l.Name == LanderOption[4] and l:FindFirstChild("LanderOwner").Value == plr.Name then
+                    
                     _G.lander = l 
                     _G.PlanetInstanceNames = LanderOption
+                    
                     return _G.lander
                 end
             end
@@ -278,7 +281,7 @@ local function QuickTpToPrompt(Prompt)
         end
      end)
 end
-
+print(GetLander())
 local landed = GetLander().Landed
 if not landed.Value then 
     landed:GetPropertyChangedSignal("Value"):Wait()
